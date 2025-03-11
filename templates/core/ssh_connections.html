@@ -1,0 +1,52 @@
+{% extends "core/layout.html" %}
+{% load static %}
+{% block content %}
+<div class="content-wrapper">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="table-responsive pt-3">
+            <table class="table table-striped project-orders-table">
+              <thead>
+                <tr>
+                  <th class="ms-5">Source</th>
+                  <th>Destination</th>
+                  <th>Protocal</th>
+                  <th>Packet Size</th>
+                  <th>Status</th>
+                  <th>Traffic</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                    <td>192.168.1.171</td>
+                    <td> 192.167.4.241 </td>
+                    <td> SSH </td>
+                    <td>123 bits</td>
+                    <td>Malicous</td>
+                    <td>1.3K</td>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <button type="button" class="btn btn-success btn-sm btn-icon-text me-3">
+                          Allow
+                          <i class="typcn typcn-edit btn-icon-append"></i>                          
+                        </button>
+                        <button type="button" class="btn btn-danger btn-sm btn-icon-text">
+                          Block
+                          <i class="typcn typcn-delete-outline btn-icon-append"></i>                          
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- content-wrapper ends -->
+
+  {% endblock %}

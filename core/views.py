@@ -69,5 +69,5 @@ def check_flask_app_status(request):
         return JsonResponse({"message": "Flask app is not running.", "is_running": False})
     
 
-def ssh_conntion_rules(request):
-    return render(request, 'core/rules.html')
+
+

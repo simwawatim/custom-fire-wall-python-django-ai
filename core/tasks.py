@@ -1,15 +1,34 @@
+import requests
 from celery import shared_task
-import redis
-import json
+from core.models import SSHConnection
 
 @shared_task
 def fetch_ssh_sessions():
-    """Fetches the latest SSH sessions from Redis."""
-    r = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
-    ssh_sessions_json = r.get('ssh_sessions')
-    
-    if ssh_sessions_json:
-        ssh_sessions = json.loads(ssh_sessions_json)
+    try:
+        response = requests.get("http://localhost:5000/api/ssh_sessions")
+        response.raise_for_status()  
+        ssh_sessions = response.json()
 
-        return ssh_sessions
-    return None
+        for key, session in ssh_sessions.items():
+            source, destination = key.split(' -> ')
+            start_time = session.get("start_time", "Unknown")
+            end_time = session.get("end_time", "Active") 
+            """
+            
+            print(f"Source: {source}, Destination: {destination}")
+            print(f"Start Time: {start_time}, End Time: {end_time}")
+            print("-" * 50)
+
+            """
+
+            SSHConnection.objects.create(
+                source=source,
+                destination=destination,
+                start_time=start_time,
+                end_time=end_time
+            )
+            
+            return "Done"
+
+    except requests.RequestException as e:
+        return "Not done!"

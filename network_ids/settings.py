@@ -22,9 +22,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-)y#78_hvau2mw46(32^$jdn0cdrt9aen=@&^fq-m)3df29ld#5'
 
+SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = ['0.0.0.0', '172.17.165.36']
+ALLOWED_HOSTS = ['*']
 
 
 
@@ -37,8 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
     'core'
 ]
+
+ASGI_APPLICATION = 'network_ids.asgi.application'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

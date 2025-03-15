@@ -28,4 +28,42 @@
   </div>
   <!-- content-wrapper ends -->
 
+
+  <!DOCTYPE html>
+<html>
+<head>
+    <title>Control Flask App</title>
+    <style>
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            border-top-color: #000;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Control Flask App</h1>
+    <button id="start-button">Start Flask App</button>
+    <button id="stop-button" class="hidden">Stop Flask App</button>
+    <span id="loading" class="loading hidden"></span>
+
+    <script>
+    
+    </script>
+</body>
+</html>
   {% endblock %}

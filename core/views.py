@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from core.models import SSHConnection
 from django.shortcuts import render
 import subprocess
 import os
@@ -70,7 +71,11 @@ def check_flask_app_status(request):
     
 
 def recent_connections(request):
-    return render(request, 'core/recent_connection.html')
+    connections = SSHConnection.objects.all()
+    context = {
+        'connections':connections
+    }
+    return render(request, 'core/recent_connection.html', context)
     
 
 

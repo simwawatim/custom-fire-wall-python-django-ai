@@ -210,4 +210,18 @@
     });
   });
 </script>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Initialize DataTables
+    $('#colum-render').DataTable({
+      responsive: true, // Enable responsive feature
+      paging: true, // Enable pagination
+      searching: true, // Enable search bar
+      ordering: true, // Enable column sorting
+      info: true, // Show table information
+    });
+  });
+</script>
 {% endblock %}

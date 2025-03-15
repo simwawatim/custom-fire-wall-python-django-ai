@@ -3,20 +3,12 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'assets/css/plugins/dataTables.bootstrap5.min.css' %}">
 <div class="pc-content">
-
   <div class="row">
-    <!-- DOM/Jquery table end -->
-    <!-- Column Rendering table start -->
     <div class="col-sm-12">
       <div class="card">
-       
-
         <div class="card-header">
-          <div id="status-message" class="mb-3 my-3"></div> <!-- Status message will appear here -->
-        <div class="button-container my-4">
-          <button id="start-button" class="btn btn-primary">Start Flask App</button>
-          <button id="stop-button" class="btn btn-danger hidden">Stop Flask App</button>
-        </div>
+          <h5>Connection Details</h5>
+          <small>List of active and historical connections.</small>
         </div>
         <div class="card-body">
           <div class="table-responsive dt-responsive">
@@ -32,181 +24,50 @@
                 </tr>
               </thead>
               <tbody>
-                <!-- Table rows will be dynamically populated here -->
+                {% for connection in connections %}
+                <tr>
+                  <td>{{ connection.source }}</td>
+                  <td>{{ connection.destination }}</td>
+                  <td>{{ connection.protocol }}</td>
+                  <td>{{ connection.start_time }}</td>
+                  <td>{{ connection.end_time|default:"Active" }}</td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <button type="button" class="btn btn-success btn-sm btn-icon-text me-3">
+                        Allow
+                        <i class="typcn typcn-edit btn-icon-append"></i>                          
+                      </button>
+                      <button type="button" class="btn btn-danger btn-sm btn-icon-text">
+                        Block
+                        <i class="typcn typcn-delete-outline btn-icon-append"></i>                          
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
               </tbody>
             </table>
           </div>
         </div>
       </div>
     </div>
-    <!-- Column Rendering table end -->
   </div>
-  <!-- [ Main Content ] end -->
 </div>
-
-<style>
-  /* Add custom styles for the buttons and status message */
-  .button-container {
-    display: flex;
-    gap: 10px; /* Space between buttons */
-    margin-bottom: 20px;
-  }
-
-  .hidden {
-    display: none; /* Hide the stop button by default */
-  }
-
-  #status-message {
-    padding: 10px;
-    border-radius: 5px;
-    font-weight: bold;
-  }
-
-  #status-message.success {
-    background-color: #d4edda; /* Green background for success */
-    color: #155724; /* Dark green text */
-  }
-
-  #status-message.error {
-    background-color: #f8d7da; /* Red background for error */
-    color: #721c24; /* Dark red text */
-  }
-</style>
 
 <!-- datatable Js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="{% static 'assets/js/plugins/jquery.dataTables.min.js' %}"></script>
 <script src="{% static 'assets/js/plugins/dataTables.bootstrap5.min.js' %}"></script>
+
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    let fetchInterval;
-    const startButton = document.getElementById('start-button');
-    const stopButton = document.getElementById('stop-button');
-    const statusMessage = document.getElementById('status-message');
-
-    // Function to fetch and update SSH session data
-    function fetchAndUpdateSessions() {
-      fetch('http://localhost:5000/api/ssh_sessions') // Replace with your actual API endpoint
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
-        })
-        .then((data) => {
-          console.log('SSH Sessions:', data);
-
-          // Clear the existing table rows
-          const tableBody = document.querySelector('#colum-render tbody');
-          tableBody.innerHTML = '';
-
-          // Loop through the data and create table rows for only active sessions
-          for (const [key, session] of Object.entries(data)) {
-            if (!session.end_time) { // Show only active sessions
-              const [source, destination] = key.split(' -> ');
-
-              const row = document.createElement('tr');
-              row.innerHTML = `
-                <td>${source}</td>
-                <td>${destination}</td>
-                <td>SSH</td>
-                <td>${session.start_time}</td>
-                <td>Active</td>
-                <td>
-                  <div class="d-flex align-items-center">
-                    <button type="button" class="btn btn-success btn-sm btn-icon-text me-3">
-                      Allow
-                      <i class="typcn typcn-edit btn-icon-append"></i>                          
-                    </button>
-                    <button type="button" class="btn btn-danger btn-sm btn-icon-text">
-                      Block
-                      <i class="typcn typcn-delete-outline btn-icon-append"></i>                          
-                    </button>
-                  </div>
-                </td>
-              `;
-              tableBody.appendChild(row);
-            }
-          }
-        })
-        .catch((error) => {
-          console.error('Error fetching SSH sessions:', error);
-        });
-    }
-
-    // Function to start fetching SSH session data
-    function startFetchingSessions() {
-      fetchAndUpdateSessions();
-      fetchInterval = setInterval(fetchAndUpdateSessions, 5000); // Fetch every 5 seconds
-    }
-
-    // Function to stop fetching SSH session data
-    function stopFetchingSessions() {
-      if (fetchInterval) {
-        clearInterval(fetchInterval);
-        fetchInterval = null;
-      }
-    }
-
-    // Function to update button visibility and status message
-    function updateButtonStates(isRunning) {
-      if (isRunning) {
-        startButton.classList.add('hidden'); // Hide start button
-        stopButton.classList.remove('hidden'); // Show stop button
-        statusMessage.textContent = 'Flask app is running.';
-        statusMessage.className = 'success'; // Apply success style
-      } else {
-        startButton.classList.remove('hidden'); // Show start button
-        stopButton.classList.add('hidden'); // Hide stop button
-        statusMessage.textContent = 'Flask app is not running.';
-        statusMessage.className = 'error'; // Apply error style
-      }
-    }
-
-    // Check Flask app status on page load
-    fetch('/check-flask-app-status/')
-      .then((response) => response.json())
-      .then((data) => {
-        updateButtonStates(data.is_running);
-        if (data.is_running) {
-          startFetchingSessions();
-        }
-      })
-      .catch(() => {
-        statusMessage.textContent = 'Failed to check Flask app status.';
-        statusMessage.className = 'error';
-      });
-
-    // Start Flask App
-    startButton.addEventListener('click', () => {
-      fetch('/start-flask-app/')
-        .then((response) => response.json())
-        .then((data) => {
-          alert(data.message);
-          updateButtonStates(true); // Update buttons to reflect running state
-          startFetchingSessions();
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-          statusMessage.textContent = 'Failed to start Flask app.';
-          statusMessage.className = 'error';
-        });
-    });
-
-    // Stop Flask App
-    stopButton.addEventListener('click', () => {
-      fetch('/stop-flask-app/')
-        .then((response) => response.json())
-        .then((data) => {
-          alert(data.message);
-          updateButtonStates(false); // Update buttons to reflect stopped state
-          stopFetchingSessions();
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-          statusMessage.textContent = 'Failed to stop Flask app.';
-          statusMessage.className = 'error';
-        });
+    // Initialize DataTables
+    $('#colum-render').DataTable({
+      responsive: true, // Enable responsive feature
+      paging: true, // Enable pagination
+      searching: true, // Enable search bar
+      ordering: true, // Enable column sorting
+      info: true, // Show table information
     });
   });
 </script>

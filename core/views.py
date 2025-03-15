@@ -69,5 +69,9 @@ def check_flask_app_status(request):
         return JsonResponse({"message": "Flask app is not running.", "is_running": False})
     
 
+def recent_connections(request):
+    return render(request, 'core/recent_connection.html')
+    
+
 
 

@@ -1,10 +1,14 @@
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.contrib.auth import authenticate, login as auth_login
+from django.shortcuts import redirect, render
+from django.contrib.auth.models import User
 from core.models import SSHConnection
-from django.shortcuts import render
+from django.http import JsonResponse
+from django.contrib import messages
 import subprocess
-import os
 import signal
+import os
+
 
 flask_process = None
 
@@ -15,7 +19,25 @@ def home(request):
     return render(request, 'core/home.html')
 
 def login_user(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
 
+        user = User.objects.filter(email=email).first()
+        if user:
+            user = authenticate(request, password=password)
+            if user is not None:
+                auth_login(request, user)
+                return redirect('core:home')
+
+            else:
+
+                messages.warning(request, 'Invalid credentails')
+                return redirect('core:login_user')
+        else:
+            messages.warning(request, 'Invalid credentails')
+            return redirect('core:login_user')
+        
     return render(request, 'core/login.html')
 
 def logout_user(request):

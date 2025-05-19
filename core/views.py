@@ -18,27 +18,22 @@ def home(request):
 
     return render(request, 'core/home.html')
 
+
 def login_user(request):
     if request.method == 'POST':
-        email = request.POST.get('email')
+        username = request.POST.get('username')
         password = request.POST.get('password')
 
-        user = User.objects.filter(email=email).first()
-        if user:
-            user = authenticate(request, password=password)
-            if user is not None:
-                auth_login(request, user)
-                return redirect('core:home')
-
-            else:
-
-                messages.warning(request, 'Invalid credentails')
-                return redirect('core:login_user')
+        user = authenticate(request, username=username, password=password)  
+        if user is not None:
+            auth_login(request, user)
+            return redirect('core:home')
         else:
-            messages.warning(request, 'Invalid credentails')
+            messages.warning(request, 'Invalid email or password credentials')
             return redirect('core:login_user')
-        
+
     return render(request, 'core/login.html')
+
 
 def logout_user(request):
     """Handle user logout (to be implemented)."""

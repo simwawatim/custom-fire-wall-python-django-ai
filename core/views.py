@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from core.models import SSHConnection
 from django.shortcuts import render
@@ -7,12 +8,14 @@ import signal
 
 flask_process = None
 
+@login_required(login_url='/login/')
 def home(request):
     """Render the home page."""
+
     return render(request, 'core/home.html')
 
 def login_user(request):
-    """Render the login page."""
+
     return render(request, 'core/login.html')
 
 def logout_user(request):

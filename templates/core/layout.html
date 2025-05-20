@@ -4,7 +4,7 @@
   <!-- [Head] start -->
 
   <head>
-    <title>Home | Able Pro Dashboard Template</title>
+    <title>Home</title>
     <!-- [Meta] -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
@@ -46,10 +46,10 @@
 <nav class="pc-sidebar">
   <div class="navbar-wrapper">
     <div class="m-header">
-      <a href="#" class="b-brand text-primary">
+      <a href="/" class="b-brand text-primary">
         <!-- ========   Change your logo from here   ============ -->
-        <img src="../assets/images/logo-dark.svg" />
-        <span class="badge bg-light-success rounded-pill ms-2 theme-version"></span>
+        <img src="{% static 'assets/images/logo.png' %}" width="50" height="50"/>
+  
       </a>
     </div>
     <div class="navbar-content">
@@ -57,10 +57,10 @@
         <div class="card-body">
           <div class="d-flex align-items-center">
             <div class="flex-shrink-0">
-              <img src="../assets/images/user/avatar-1.jpg" alt="user-image" class="user-avtar wid-45 rounded-circle" />
+              <img src="{% static 'assets/images/user/avatar-1.jpg' %}" alt="user-image" class="user-avtar wid-45 rounded-circle" />
             </div>
             <div class="flex-grow-1 ms-3 me-2">
-              <h6 class="mb-0">Jonh Smith</h6>
+              <h6 class="mb-0">{{ request.user.first_name }} {{ request.user.last_name }}</h6>
               <small>Administrator</small>
             </div>
             <a class="btn btn-icon btn-link-secondary avtar-s" data-bs-toggle="collapse" href="#pc_sidebar_userlink">
@@ -322,80 +322,14 @@
               </div>
             </div>
           </div>
-          <p class="text-span">Yesterday</p>
-          <div class="card mb-2">
-            <div class="card-body">
-              <div class="d-flex">
-                <div class="flex-shrink-0">
-                  <svg class="pc-icon text-primary">
-                    <use xlink:href="#custom-document-text"></use>
-                  </svg>
-                </div>
-                <div class="flex-grow-1 ms-3">
-                  <span class="float-end text-sm text-muted">2 hour ago</span>
-                  <h5 class="text-body mb-2">Forms</h5>
-                  <p class="mb-0"
-                    >Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of
-                    type and scrambled it to make a type</p
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="card mb-2">
-            <div class="card-body">
-              <div class="d-flex">
-                <div class="flex-shrink-0">
-                  <svg class="pc-icon text-primary">
-                    <use xlink:href="#custom-user-bold"></use>
-                  </svg>
-                </div>
-                <div class="flex-grow-1 ms-3">
-                  <span class="float-end text-sm text-muted">12 hour ago</span>
-                  <h5 class="text-body mb-2">Challenge invitation</h5>
-                  <p class="mb-2"><span class="text-dark">Jonny aber</span> invites to join the challenge</p>
-                  <button class="btn btn-sm btn-outline-secondary me-2">Decline</button>
-                  <button class="btn btn-sm btn-primary">Accept</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="card mb-2">
-            <div class="card-body">
-              <div class="d-flex">
-                <div class="flex-shrink-0">
-                  <svg class="pc-icon text-primary">
-                    <use xlink:href="#custom-security-safe"></use>
-                  </svg>
-                </div>
-                <div class="flex-grow-1 ms-3">
-                  <span class="float-end text-sm text-muted">5 hour ago</span>
-                  <h5 class="text-body mb-2">Security</h5>
-                  <p class="mb-0"
-                    >Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of
-                    type and scrambled it to make a type</p
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
+        
         </div>
-        <div class="text-center py-2">
-          <a href="#!" class="link-danger">Clear all Notifications</a>
-        </div>
+
       </div>
     </li>
     <li class="dropdown pc-h-item header-user-profile">
-      <a
-        class="pc-head-link dropdown-toggle arrow-none me-0"
-        data-bs-toggle="dropdown"
-        href="#"
-        role="button"
-        aria-haspopup="false"
-        data-bs-auto-close="outside"
-        aria-expanded="false"
-      >
-        <img src="../assets/images/user/avatar-2.jpg" alt="user-image" class="user-avtar" />
+     
+        <img src="{% static 'assets/images/user/avatar-2.jpg' %}" alt="user-image" class="user-avtar" />
       </a>
       <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
         <div class="dropdown-header d-flex align-items-center justify-content-between">

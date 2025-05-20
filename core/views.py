@@ -1,5 +1,5 @@
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login as auth_login
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
 from core.models import SSHConnection
@@ -34,6 +34,10 @@ def login_user(request):
 
     return render(request, 'core/login.html')
 
+def user_logout(request):
+    auth_login(request)
+    messages.success(request, 'You have been logged out!')
+    return redirect('core:login')
 
 def logout_user(request):
     """Handle user logout (to be implemented)."""

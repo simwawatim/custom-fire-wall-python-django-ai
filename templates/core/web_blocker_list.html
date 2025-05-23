@@ -1,0 +1,49 @@
+{% extends "core/layout.html" %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/plugins/dataTables.bootstrap5.min.css' %}">
+<div class="pc-content">
+
+  <div class="row">
+    <!-- DOM/Jquery table end -->
+    <!-- Column Rendering table start -->
+    <div class="col-sm-12">
+      <div class="card">
+       
+
+        <div class="card-header">
+          <div id="status-message" class="mb-3 my-3"></div> <!-- Status message will appear here -->
+        <div class="button-container my-4">
+          <button id="start-button" class="btn btn-primary">Add Site</button>
+        </div>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive dt-responsive">
+            <table id="colum-render" class="table table-striped table-bordered nowrap">
+              <thead>
+                <tr>
+                  <th class="ms-5">Source</th>
+                  <th>Destination</th>
+                  <th>Protocol</th>
+                  <th>Start Time</th>
+                  <th>End Time</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Table rows will be dynamically populated here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Column Rendering table end -->
+  </div>
+  <!-- [ Main Content ] end -->
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="{% static 'assets/js/plugins/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'assets/js/plugins/dataTables.bootstrap5.min.js' %}"></script>
+{% endblock %}

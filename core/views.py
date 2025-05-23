@@ -106,3 +106,7 @@ def recent_connections(request):
 
 
 
+
+def web_blocker_list(request):
+ 
+    return render(request, 'core/web_blocker_list.html')

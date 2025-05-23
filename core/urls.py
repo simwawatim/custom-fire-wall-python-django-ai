@@ -8,6 +8,7 @@ urlpatterns = [
     path('login/', login_user, name='login'),
     path('logout/', logout_user, name='logout'),
     path('traffic/', traffic, name='traffic'),
+    path('block-website/', views.block_website, name='block_website'),
     path('web-blocker-list/', views.web_blocker_list, name='web_blocker_list'),
     path('authenticant-user/', views.login_user, name='login_user'),
     path('ssh-connection/', ssh_connection, name='ssh_connection'),

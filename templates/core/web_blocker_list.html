@@ -14,7 +14,9 @@
         <div class="card-header">
           <div id="status-message" class="mb-3 my-3"></div> <!-- Status message will appear here -->
         <div class="button-container my-4">
-          <button id="start-button" class="btn btn-primary">Add Site</button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#exampleModalLong">Block Site
+            </button>
         </div>
         </div>
         <div class="card-body">
@@ -42,7 +44,34 @@
   </div>
   <!-- [ Main Content ] end -->
 </div>
-
+<div class="card-body pc-component">
+    <div id="exampleModalLong" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <form method="POST" action="{% url 'core:block_website' %}">
+        {% csrf_token %}
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                
+                <div class="form-group">
+                    <label class="form-label" for="url">Enter Url</label>
+                    <input type="text" class="form-control" name="url" id="url" placeholder="www.example.com">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+            </div>
+        </div>
+    </form>
+    </div>
+    
+</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="{% static 'assets/js/plugins/jquery.dataTables.min.js' %}"></script>
 <script src="{% static 'assets/js/plugins/dataTables.bootstrap5.min.js' %}"></script>

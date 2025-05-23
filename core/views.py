@@ -4,6 +4,7 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
 from core.models import SSHConnection
 from django.http import JsonResponse
+from core.models import BlockList
 from django.contrib import messages
 import subprocess
 import signal
@@ -108,5 +109,20 @@ def recent_connections(request):
 
 
 def web_blocker_list(request):
- 
-    return render(request, 'core/web_blocker_list.html')
+    websites = BlockList.objects.all()
+    context = {
+        'websites': websites
+    }
+    print(websites)
+    return render(request, 'core/web_blocker_list.html', context)
+
+def block_website(request):
+    if request.method == 'POST':
+        url = request.POST.get('url')
+        if url:
+            BlockList.objects.create(url=url)
+            messages.success(request, f'Website {url} has been blocked.')
+            return redirect('core:web_blocker_list')
+        else:
+            messages.error(request, 'Please provide a valid URL.')
+            return render(request, 'core/web_blocker_list')

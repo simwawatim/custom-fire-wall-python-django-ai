@@ -10,9 +10,7 @@ from threading import Thread
 
 def create_flask_app():
     app = Flask(__name__)
-    CORS(app)  # Enable CORS
-
-    # Configure logging
+    CORS(app)  
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
     # Redis connection

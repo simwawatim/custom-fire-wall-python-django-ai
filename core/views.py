@@ -9,6 +9,11 @@ from django.contrib import messages
 import subprocess
 import signal
 import os
+import os
+
+
+HOSTS_FILE = "/etc/hosts"
+REDIRECT_IP = "127.0.0.1"
 
 
 flask_process = None
@@ -78,8 +83,8 @@ def stop_flask_app(request):
 
     if flask_process and flask_process.poll() is None:
         try:
-            flask_process.terminate()  # Gracefully stop the process
-            flask_process.wait()  # Ensure the process fully exits
+            flask_process.terminate()  
+            flask_process.wait()  
             flask_process = None
             return JsonResponse({"message": "Flask app stopped successfully.", "is_running": False})
         except Exception as e:
@@ -116,13 +121,58 @@ def web_blocker_list(request):
     print(websites)
     return render(request, 'core/web_blocker_list.html', context)
 
+
+
 def block_website(request):
     if request.method == 'POST':
         url = request.POST.get('url')
         if url:
-            BlockList.objects.create(url=url)
-            messages.success(request, f'Website {url} has been blocked.')
+
+            domain = url.replace('https://', '').replace('http://', '').split('/')[0]
+
+
+            BlockList.objects.create(url=domain)
+
+            try:
+
+                with open(HOSTS_FILE, 'r') as file:
+                    if f"{REDIRECT_IP} {domain}" in file.read():
+                        messages.info(request, f'Website {domain} is already blocked.')
+                        return redirect('core:web_blocker_list')
+
+                # Append to /etc/hosts
+                with open(HOSTS_FILE, 'a') as file:
+                    file.write(f"\n{REDIRECT_IP} {domain}\n")
+
+                messages.success(request, f'Website {domain} has been blocked.')
+            except PermissionError:
+                messages.error(request, 'Permission denied: Please run the server with root privileges.')
+                print('Permission denied: Please run the server with root privileges.')
             return redirect('core:web_blocker_list')
         else:
             messages.error(request, 'Please provide a valid URL.')
-            return render(request, 'core/web_blocker_list')
+    return render(request, 'core/web_blocker_list') 
+
+
+def unblock_website(request, id):
+    try:
+        website = BlockList.objects.get(id=id)
+        domain = website.url
+        website.delete()
+        try:
+            with open(HOSTS_FILE, 'r') as file:
+                lines = file.readlines()
+            with open(HOSTS_FILE, 'w') as file:
+                for line in lines:
+                    if domain not in line:
+                        file.write(line)        
+
+            messages.success(request, f'Website {domain} has been unblocked.')
+        except PermissionError:
+            messages.error(request, 'Permission denied: Please run the server with root privileges.')
+            print('Permission denied: Please run the server with root privileges.')
+
+    except BlockList.DoesNotExist:
+        messages.error(request, 'Website not found.')
+
+    return redirect('core:web_blocker_list')

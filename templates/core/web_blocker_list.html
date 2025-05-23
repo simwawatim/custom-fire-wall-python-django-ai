@@ -23,17 +23,27 @@
           <div class="table-responsive dt-responsive">
             <table id="colum-render" class="table table-striped table-bordered nowrap">
               <thead>
+            
                 <tr>
-                  <th class="ms-5">Source</th>
-                  <th>Destination</th>
-                  <th>Protocol</th>
-                  <th>Start Time</th>
-                  <th>End Time</th>
+                  <th class="ms-5">Website</th>
+                  <th>Date</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                <!-- Table rows will be dynamically populated here -->
+
+                {% for website in websites %}
+                <tr>
+                  <td class="ms-5">{{ website.url }}</td>
+                  <td>{{ website.date_added }}</td>
+                  <td>
+                    <a href="{% url 'core:unblock_website' website.id %}" class="btn btn-danger btn-sm">Unblock</a>
+
+                    </a>
+                  </td>
+                </tr>
+                {% endfor %}
+                
               </tbody>
             </table>
           </div>
